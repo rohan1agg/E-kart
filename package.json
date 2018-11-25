@@ -2,19 +2,29 @@
   "name": "rest",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "main.js",
   "scripts": {
+    "prestart": "yarn",
+    "prestart:debug": "yarn",
+    "start": "nodemon -w src --exec \"babel-node src\"",
+    "start:debug": "nodemon --inspect -w src --exec \"babel-node src\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-preset-latest-node": "^1.0.0",
+    "babel-preset-stage-0": "^6.24.1",
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "mongoose": "^5.3.12",
     "morgan": "^1.9.1",
     "mysql": "^2.16.0",
-    "node-restful": "^0.2.6",
+    "node-restful": "^0.2.6"
+  },
+  "devDependencies": {
     "nodemon": "^1.18.6"
   }
 }
