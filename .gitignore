@@ -1,2 +1,14 @@
-./node_modules/*
+.DS_STORE
+*.log*
+
+node_modules
+
 .idea/
+dist/
+.DS_Store
+*.DS_Store
+tmp
+log
+._*
+**/._*
+node-nightly
