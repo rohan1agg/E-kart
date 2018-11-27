@@ -1,17 +1,9 @@
 // Dependencies
-// var express = require('express');
-// var mysql = require('mysql');
-// const bodyParser = require("body-parser");
 import express from 'express'
 import getConnection from './dbconnection'
 
 const products = express.Router()
-
 const conPool = getConnection()
-
-// Express - body parser
-// products.use(bodyParser.urlencoded({extended: true}))
-// products.use(bodyParser.json())
 
 products.get('/', function (req, res) {
   var sql = 'SELECT products.product_id, products.product_name, products.brand_name, category.category_name, products.product_info, products.product_status, products.avg_rating, products.price FROM products INNER JOIN category ON products.category_no=category.category_no'

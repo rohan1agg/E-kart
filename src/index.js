@@ -16,14 +16,12 @@ app.use(bodyParser.json())
 // read why do we need the next two lines
 
 // this is for static files
-app.use(express.static('./resources/WEB'))
+app.use(express.static(__dirname + '/resources/WEB'))
 
 // this is for request logging
 app.use(morgan('short'))
 // Routes
-
-app.use('/api/', api)
-
+app.use('/api', api)
 // what is the difference between res.send, res.json, res.render, res.end
 app.get('/', function (req, res) {
   res.send('Welcome!')

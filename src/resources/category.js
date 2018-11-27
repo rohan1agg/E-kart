@@ -1,9 +1,5 @@
 // Dependencies
-// var express = require('express')
-// var mysql = require('mysql')
 import express from 'express'
-// import mysql from 'mysql'
-// const bodyParser = require('body-parser')
 const category = express.Router()
 
 // instead of creating new DB connection for every route file try using singleton pattern like we did in java project
@@ -19,10 +15,6 @@ const category = express.Router()
 }) */
 import getConnection from './dbconnection'
 const conPool = getConnection()
-
-// Express - body parser
-// category.use(bodyParser.urlencoded({extended: true}))
-// category.use(bodyParser.json())
 
 category.get('/', function (req, res) {
   var sql = 'SELECT * FROM category'

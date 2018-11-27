@@ -1,16 +1,9 @@
 import express from 'express'
 import mysql from 'mysql'
 
-// var express = require('express');
-// var mysql = require('mysql');
-// const bodyParser = require("body-parser");
-
 // replace var with const - read about difference between var, const, let
 let ekartDb = express.Router()
 
-// Express - body parser - required just once (inititized in index.js)
-// ekartDb.use(bodyParser.urlencoded({ extended: true }));
-// ekartDb.use(bodyParser.json());
 import getConnection from './dbconnection'
 const conPool = getConnection()
 
@@ -19,16 +12,22 @@ const conPool = getConnection()
 // 		res.send("Invalid Credentials!\nAccess Denied!");
 // 		return;
 // 	}
-// 	var sql = 'ALTER TABLE user_orders MODIFY COLUMN order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP'
+// 	var sql = 'ALTER TABLE dealers MODIFY COLUMN mobile_no VARCHAR(10)'
 // 	conPool.query(sql, (err, result)=>{
-// 		res.send('Table user_orders altered!');
-// 	});
-// });
+//     if(err){
+//       console.log(err)
+//       res.send('Error')
+//       return
+//     }
+// 		res.send('Table dealers altered!')
+// 	})
+// })
 
 ekartDb.post('/reCreate', (req, res) => {
   if (req.body.adminID !== 'root' && req.body.password !== 'rohan296') {
-    res.send('Invalid Credentials!\nAccess Denied!')
-    // should send http error code 401 here
+    res.sendStatus(401)
+    // res.send('Invalid Credentials!\nAccess Denied!')
+    res.end()
     return
   }
   var sql = 'DROP DATABASE ekart'
@@ -93,12 +92,12 @@ ekartDb.post('/reCreate', (req, res) => {
         if (err) throw err
         console.log('dealers table created!')
       })
-      sql = 'CREATE TABLE order_contents (order_id INT NOT NULL, product_id INT NOT NULL, dealer_id INT NOT NULL, FOREIGN KEY (order_id) REFERENCES user_orders(order_id), FOREIGN KEY (product_id) REFERENCES products(product_id), FOREIGN KEY (dealer_id) REFERENCES dealers(dealer_id), CONSTRAINT order_item PRIMARY KEY (order_id, product_id, dealer_id))'
+      sql = 'CREATE TABLE order_contents (order_id INT NOT NULL, product_id INT NOT NULL, dealer_id INT NOT NULL, quantity INT(5) NOT NULL, FOREIGN KEY (order_id) REFERENCES user_orders(order_id), FOREIGN KEY (product_id) REFERENCES products(product_id), FOREIGN KEY (dealer_id) REFERENCES dealers(dealer_id), CONSTRAINT order_item PRIMARY KEY (order_id, product_id, dealer_id))'
       con.query(sql, function (err, result) {
         if (err) throw err
         console.log('order_contents table created!')
       })
-      sql = 'CREATE TABLE user_cart (user_id INT NOT NULL, product_id INT NOT NULL,  dealer_id INT NOT NULL, quantity INT(2) NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id), FOREIGN KEY (product_id) REFERENCES products(product_id), FOREIGN KEY (dealer_id) REFERENCES dealers(dealer_id), CONSTRAINT user_cart_item PRIMARY KEY (user_id, product_id, dealer_id))'
+      sql = 'CREATE TABLE user_cart (user_id INT NOT NULL, product_id INT NOT NULL,  dealer_id INT NOT NULL, quantity INT(5) NOT NULL, FOREIGN KEY (user_id) REFERENCES users(user_id), FOREIGN KEY (product_id) REFERENCES products(product_id), FOREIGN KEY (dealer_id) REFERENCES dealers(dealer_id), CONSTRAINT user_cart_item PRIMARY KEY (user_id, product_id, dealer_id))'
       con.query(sql, function (err, result) {
         if (err) throw err
         console.log('user_cart table created!')
@@ -114,4 +113,3 @@ ekartDb.post('/reCreate', (req, res) => {
 })
 
 export default ekartDb
-// module.exports = ekartDb
