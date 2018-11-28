@@ -27,21 +27,29 @@ order.get('/', (req, res) => {
       console.log(err)
       return
     }
-    for(var x in result){
+    let userOrders = (result) => {
+      return Promise.all(result.map(x => {return orderContents(x)}))
+    }
+    function orderContents(x) {
       var sql = 'SELECT product_id, dealer_id, quantity FROM order_contents WHERE order_id = ?'
-      conPool.query(sql, [result[x].order_id], (err, items, fields) => {
-        if (err) {
-          res.sendStatus(500)
-          res.end()
-          console.log(err)
-          return
-        }
-        result[x].items = items
-        console.log(result[x])
+      return new Promise((resolve, reject) => {
+        conPool.query(sql, [x.order_id], (err, items, fields) => {
+          if (err) {
+            res.sendStatus(500)
+            res.end()
+            reject(err)
+          }
+          x.items = items
+          resolve(x)
+        })
       })
     }
-    console.log(result)
-    res.json(result)
+    userOrders(result).then(values => {
+      res.json(values)
+    }).catch(err =>{
+      res.sendStatus(500)
+      console.log(err)
+    })
   })
 })
 

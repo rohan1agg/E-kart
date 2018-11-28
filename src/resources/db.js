@@ -8,7 +8,7 @@ import getConnection from './dbconnection'
 const conPool = getConnection()
 
 // ekartDb.post('/alter', (req, res)=>{
-// 	if(req.body.adminID!=='root' && req.body.password!=='rohan296'){
+// 	if(req.body.adminID!==DB_USER && req.body.password!==DB_PASS){
 // 		res.send("Invalid Credentials!\nAccess Denied!");
 // 		return;
 // 	}
@@ -24,7 +24,7 @@ const conPool = getConnection()
 // })
 
 ekartDb.post('/reCreate', (req, res) => {
-  if (req.body.adminID !== 'root' && req.body.password !== 'rohan296') {
+  if (req.body.adminID !== DB_USER && req.body.password !== DB_PASS) {
     res.sendStatus(401)
     // res.send('Invalid Credentials!\nAccess Denied!')
     res.end()
@@ -43,9 +43,9 @@ ekartDb.post('/reCreate', (req, res) => {
   })
   // learn about loading configurations from a config file / env variables - ideally configs are kept in .env or .json files and sensititve information like passwords are provided in process.env variables
   var con1 = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'rohan296',
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASS,
   })
 
   con1.connect(function (err) {
@@ -58,12 +58,7 @@ ekartDb.post('/reCreate', (req, res) => {
         throw err
       }
       console.log('Database ekart created')
-      con = mysql.createPool({
-        host: 'localhost',
-        user: 'root',
-        password: 'rohan296',
-        database: 'ekart'
-      })
+      const con = getConnection()
       // read about flyway or other db migration tools and try to implement them
       // learn about ORM tools like sequalize
       var sql

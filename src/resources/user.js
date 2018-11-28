@@ -8,7 +8,6 @@ const conPool = getConnection()
 
 user.get('/', function (req, res) {
 	var sql = "SELECT * FROM users"
-	
 	conPool.query(sql, function(err, result, fields){
 		if(err){
 			res.sendStatus(500)
@@ -30,7 +29,10 @@ user.post('/login', function (req, res) {
 			return
 		}
 		if(result[0])res.json(result)
-		else res.send("Invalid User Credentials!")
+		else {
+			res.sendStatus(401)
+			res.end()
+		}
 	})
 })
 
